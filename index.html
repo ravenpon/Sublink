@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAVVPN — سریع، پایدار، امن</title>
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="RAVVPN — سریع، پایدار، امن">
+<meta property="og:description" content="کانفیگ رایگان و اشتراک اختصاصی VPN. بدون فیلتر، بدون لاگ، بدون محدودیت.">
+<meta property="og:image" content="https://ravenpon.github.io/sublink/logo.jpg">
+<meta property="og:url" content="https://ravenpon.github.io/sublink/">
+<meta property="og:locale" content="fa_IR">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="RAVVPN — سریع، پایدار، امن">
+<meta name="twitter:description" content="کانفیگ رایگان و اشتراک اختصاصی VPN. بدون فیلتر، بدون لاگ، بدون محدودیت.">
+<meta name="twitter:image" content="https://ravenpon.github.io/sublink/logo.jpg">
+
+<meta name="description" content="کانفیگ رایگان و اشتراک اختصاصی VPN. سریع، پایدار و امن، بدون فیلتر و بدون لاگ.">
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#03060c">
+<link rel="apple-touch-icon" href="logo.jpg">
+<link rel="icon" href="logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-void:#03060c;
+    --bg-panel:#0a1220;
+    --bg-panel-2:#0f1c30;
+    --line:#1c2c44;
+    --cyan:#3fe0ff;
+    --cyan-soft:#8bf2ff;
+    --blue:#2f6bff;
+    --text-hi:#eaf6ff;
+    --text-lo:#7c93ad;
+    --ok:#39ffb0;
+    --off:#5a6b81;
+    --glass:rgba(15,28,48,.55);
+    --shadow-sm:0 6px 18px -8px rgba(0,0,0,.5);
+    --shadow-md:0 16px 40px -16px rgba(0,0,0,.6);
+    --shadow-glow:0 0 0 1px rgba(63,224,255,.08), 0 20px 50px -22px rgba(63,224,255,.4);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg-void);
+    color:var(--text-hi);
+    font-family:'Vazirmatn', sans-serif;
+    min-height:100vh;
+    position:relative;
+    overflow-x:hidden;
+  }
+  .grid-bg{
+    position:fixed; inset:0; z-index:0; opacity:.35;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size:42px 42px;
+    mask-image:radial-gradient(ellipse 80% 60% at 50% 20%, black 30%, transparent 75%);
+  }
+  .glow-orb{
+    position:fixed; z-index:0; border-radius:50%;
+    filter:blur(90px); pointer-events:none;
+  }
+  .glow-orb.one{ width:520px; height:520px; top:-160px; right:-160px; background:radial-gradient(circle, rgba(63,224,255,.28), transparent 70%);}
+  .glow-orb.two{ width:420px; height:420px; bottom:-120px; left:-140px; background:radial-gradient(circle, rgba(47,107,255,.22), transparent 70%);}
+  .wrap{ position:relative; z-index:1; max-width:880px; margin:0 auto; padding:0 20px;}
+
+  /* ===== top nav + hamburger ===== */
+  .topnav{
+    position:sticky; top:0; z-index:30;
+    display:flex; align-items:center; justify-content:space-between;
+    background:rgba(3,6,12,.85); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+    padding:16px 20px;
+    box-shadow:0 8px 24px -18px rgba(0,0,0,.7);
+  }
+  .topnav .inner{
+    display:flex; align-items:center; justify-content:space-between;
+    max-width:880px; margin:0 auto; width:100%;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; }
+  .brand img{ width:32px; height:32px; border-radius:9px; box-shadow:0 0 0 1px rgba(63,224,255,.25); }
+  .brand span{
+    font-family:'Orbitron', sans-serif; font-weight:800; letter-spacing:1px;
+    font-size:17px; color:var(--text-hi);
+  }
+  .hamburger{
+    width:40px; height:40px; border-radius:10px;
+    background:var(--bg-panel); border:1px solid var(--line);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+    cursor:pointer;
+  }
+  .hamburger span{
+    display:block; width:18px; height:2px; background:var(--cyan-soft); border-radius:2px;
+    transition:transform .25s ease, opacity .25s ease;
+  }
+  .hamburger.open span:nth-child(1){ transform:translateY(6px) rotate(45deg); }
+  .hamburger.open span:nth-child(2){ opacity:0; }
+  .hamburger.open span:nth-child(3){ transform:translateY(-6px) rotate(-45deg); }
+
+  .menu-overlay{
+    position:fixed; inset:0; z-index:40;
+    background:rgba(3,6,12,.7); backdrop-filter:blur(4px);
+    opacity:0; pointer-events:none; transition:opacity .25s ease;
+  }
+  .menu-overlay.open{ opacity:1; pointer-events:auto; }
+  .menu-panel{
+    position:absolute; top:0; right:0; height:100%; width:min(78vw, 320px);
+    background:linear-gradient(180deg, var(--bg-panel-2), var(--bg-void));
+    border-left:1px solid var(--line);
+    padding:26px 22px; display:flex; flex-direction:column; gap:6px;
+    transform:translateX(100%); transition:transform .3s ease;
+  }
+  .menu-overlay.open .menu-panel{ transform:translateX(0); }
+  .menu-panel .menu-head{
+    display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;
+  }
+  .menu-panel .menu-head span{
+    font-family:'Orbitron', sans-serif; font-weight:800; color:var(--cyan-soft); font-size:15px;
+  }
+  .menu-close{
+    width:32px; height:32px; border-radius:8px; background:var(--bg-panel);
+    border:1px solid var(--line); color:var(--text-lo); font-size:16px;
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+  .menu-link{
+    text-decoration:none; color:var(--text-hi); font-size:15px; font-weight:600;
+    padding:13px 14px; border-radius:12px; transition:background .15s ease, color .15s ease;
+  }
+  .menu-link:hover, .menu-link.active{
+    background:rgba(63,224,255,.10); color:var(--cyan-soft);
+  }
+
+  /* ===== pages ===== */
+  .page{ display:none; padding:40px 0 64px; animation:fadeIn .4s cubic-bezier(.22,.68,0,1); }
+  .page.active{ display:block; }
+  @keyframes fadeIn{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:translateY(0); } }
+
+  .page-title{
+    font-size:11.5px; letter-spacing:4px; color:var(--cyan); font-family:'Orbitron',sans-serif;
+    text-align:center; margin-bottom:10px; text-transform:uppercase;
+  }
+  .page-heading{ text-align:center; font-size:24px; font-weight:800; margin-bottom:36px; letter-spacing:-.2px; }
+
+  /* ===== hero (home) ===== */
+  .hero{ text-align:center; padding:14px 0 10px; }
+  .hero .shield{ position:relative; width:124px; height:124px; margin:0 auto 20px; }
+  .hero .shield img{
+    position:relative; z-index:2; width:100%; height:100%; object-fit:cover; border-radius:24px;
+    box-shadow:0 10px 30px -8px rgba(0,0,0,.6);
+  }
+  .hero .shield::before{
+    content:''; position:absolute; inset:-9px; border-radius:34px; z-index:1;
+    background:conic-gradient(from 0deg, var(--cyan), var(--blue), var(--cyan-soft), var(--blue), var(--cyan));
+    animation:haloSpin 6s linear infinite;
+    -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
+    mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
+  }
+  .hero .shield::after{
+    content:''; position:absolute; inset:-22px; border-radius:38px; z-index:0;
+    background:radial-gradient(circle, rgba(63,224,255,.35), transparent 70%);
+    filter:blur(20px);
+  }
+  @keyframes haloSpin{ to{ transform:rotate(360deg); } }
+  .wordmark{
+    font-family:'Orbitron', sans-serif; font-weight:900; letter-spacing:4px;
+    font-size:clamp(28px, 7vw, 40px);
+    background:linear-gradient(90deg, var(--cyan-soft), var(--cyan) 45%, var(--blue));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    margin-bottom:6px;
+  }
+  .tagline{ font-size:12.5px; letter-spacing:3px; color:var(--text-lo); font-family:'Orbitron',sans-serif; margin-bottom:22px;}
+  h1{
+    font-size:clamp(21px, 5vw, 30px); font-weight:800; line-height:1.6;
+    margin-bottom:10px; min-height:1.6em;
+  }
+  #typedText{ color:var(--cyan); }
+  .cursor{ color:var(--cyan-soft); animation:blink 1s step-end infinite; }
+  @keyframes blink{ 50%{ opacity:0; } }
+  .lead{ color:var(--text-lo); font-size:14.5px; line-height:2; max-width:560px; margin:0 auto 30px; }
+
+  /* CTA buttons on home */
+  .cta-row{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:48px; }
+  .cta-btn{
+    text-decoration:none; font-weight:800; font-size:14.5px; padding:16px 32px; border-radius:13px;
+    display:inline-flex; align-items:center; gap:8px; cursor:pointer; border:none;
+    font-family:'Vazirmatn',sans-serif; transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .cta-btn:hover{ transform:translateY(-3px); }
+  .cta-btn:active{ transform:translateY(-1px) scale(.98); }
+  .cta-btn.primary{
+    background:linear-gradient(135deg, var(--cyan), var(--blue)); color:#04121a;
+    box-shadow:0 14px 34px -12px rgba(63,224,255,.65);
+  }
+  .cta-btn.primary:hover{ box-shadow:0 18px 40px -10px rgba(63,224,255,.8); }
+  .cta-btn.secondary{
+    background:var(--glass); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    color:var(--cyan-soft); border:1px solid rgba(63,224,255,.35);
+    box-shadow:var(--shadow-sm);
+  }
+  .cta-btn.secondary:hover{ border-color:rgba(63,224,255,.6); }
+
+  /* stats */
+  .stats-grid{ display:grid; grid-template-columns:repeat(4, 1fr); gap:12px; margin-bottom:48px; }
+  .stat-card{
+    background:var(--glass); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    border:1px solid var(--line); border-radius:16px;
+    padding:22px 8px; text-align:center;
+    box-shadow:var(--shadow-sm);
+    transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  }
+  .stat-card:hover{ transform:translateY(-3px); border-color:rgba(63,224,255,.3); box-shadow:var(--shadow-md); }
+  .stat-num{
+    font-family:'Orbitron', sans-serif; font-weight:800; font-size:clamp(19px, 5vw, 27px);
+    background:linear-gradient(90deg, var(--cyan-soft), var(--cyan));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    margin-bottom:6px;
+  }
+  .stat-label{ font-size:10.5px; color:var(--text-lo); letter-spacing:.3px; }
+
+  /* features */
+  .features{ display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; }
+  .feature{
+    background:var(--glass); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    border:1px solid var(--line); border-radius:16px;
+    padding:22px 14px; text-align:center;
+    box-shadow:var(--shadow-sm);
+    transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  }
+  .feature:hover{ transform:translateY(-3px); border-color:rgba(63,224,255,.3); box-shadow:var(--shadow-glow); }
+  .feature .ic{
+    width:42px; height:42px; margin:0 auto 12px; border-radius:12px; font-size:19px;
+    display:flex; align-items:center; justify-content:center;
+    background:radial-gradient(circle, rgba(63,224,255,.16), rgba(63,224,255,.02));
+    border:1px solid rgba(63,224,255,.2);
+  }
+  .feature h4{ font-size:13.5px; margin-bottom:5px; font-weight:700; }
+  .feature p{ font-size:11.5px; color:var(--text-lo); line-height:1.7; }
+
+  /* ===== subscription link cards ===== */
+  .link-card{
+    background:linear-gradient(180deg, var(--bg-panel-2), var(--bg-panel));
+    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    border:1px solid var(--line); border-radius:18px;
+    padding:24px; max-width:640px; margin:0 auto 18px;
+    box-shadow:var(--shadow-glow);
+    transition:border-color .2s ease;
+  }
+  .link-card:hover{ border-color:rgba(63,224,255,.3); }
+  .link-label{
+    display:flex; align-items:center; justify-content:space-between;
+    font-size:12.5px; color:var(--text-lo); margin-bottom:10px;
+  }
+  .link-label b{ color:var(--cyan-soft); font-weight:600; }
+  .link-row{
+    display:flex; gap:10px; align-items:center;
+    background:var(--bg-void); border:1px solid var(--line); border-radius:12px;
+    padding:12px 14px;
+  }
+  .link-row input{
+    flex:1; background:transparent; border:none; outline:none;
+    color:var(--text-hi); font-family:monospace; font-size:12.5px;
+    direction:ltr; text-align:left; width:100%;
+  }
+  .copy-btn{
+    flex-shrink:0; border:none; cursor:pointer;
+    background:linear-gradient(135deg, var(--cyan), var(--blue));
+    color:#04121a; font-weight:800; font-family:'Vazirmatn',sans-serif;
+    padding:11px 20px; border-radius:10px; font-size:13.5px;
+    transition:transform .15s ease, box-shadow .15s ease;
+    box-shadow:0 6px 20px -6px rgba(63,224,255,.6);
+  }
+  .copy-btn:hover{ transform:translateY(-1px); box-shadow:0 10px 26px -6px rgba(63,224,255,.75); }
+  .copy-btn:active{ transform:translateY(0) scale(.97); }
+  .copy-btn.copied{ background:linear-gradient(135deg, var(--ok), #1fd49a); }
+  .hint{ font-size:12px; color:var(--text-lo); margin-top:16px; text-align:center; }
+
+  /* ===== apps / buy grid (shared card style) ===== */
+  .cards-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; }
+  .mini-card{
+    display:block; text-decoration:none; text-align:center;
+    background:var(--glass); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    border:1px solid var(--line); border-radius:16px;
+    padding:24px 14px; box-shadow:var(--shadow-sm);
+    transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+  }
+  .mini-card:hover{ transform:translateY(-4px); border-color:rgba(63,224,255,.4); box-shadow:var(--shadow-glow); }
+  .mini-card .ic{
+    width:44px; height:44px; margin:0 auto 12px; border-radius:13px; font-size:21px;
+    display:flex; align-items:center; justify-content:center;
+    background:radial-gradient(circle, rgba(63,224,255,.16), rgba(63,224,255,.02));
+    border:1px solid rgba(63,224,255,.2);
+  }
+  .mini-card h3{ color:var(--text-hi); font-size:14px; margin-bottom:4px; font-weight:700; }
+  .mini-card p{ color:var(--text-lo); font-size:11px; margin-bottom:14px; line-height:1.6; }
+  .mini-btn{
+    display:inline-block; background:linear-gradient(135deg, var(--cyan), var(--blue));
+    color:#04121a; font-weight:800; font-size:12px; padding:7px 18px; border-radius:8px;
+    box-shadow:0 6px 16px -6px rgba(63,224,255,.5);
+  }
+
+  /* ===== servers ===== */
+  .servers-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; }
+  .server-chip{
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    background:var(--glass); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    border:1px solid var(--line); border-radius:12px;
+    padding:12px 14px; font-size:12.5px;
+    box-shadow:var(--shadow-sm);
+    transition:transform .2s ease, border-color .2s ease;
+  }
+  .server-chip:not(.offline):hover{ transform:translateY(-2px); border-color:rgba(63,224,255,.3); }
+  .server-chip .flag{ font-size:16px; }
+  .server-chip .name{ flex:1; text-align:right; color:var(--text-hi); }
+  .server-chip.offline .name{ color:var(--text-lo); }
+  .server-chip.offline .flag{ filter:grayscale(1); opacity:.5; }
+  .dot2{
+    width:7px; height:7px; border-radius:50%; background:var(--ok);
+    box-shadow:0 0 6px var(--ok); flex-shrink:0; animation:pulse 1.8s infinite;
+  }
+  .server-chip.offline .dot2{ background:var(--off); box-shadow:none; animation:none; }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.35;} }
+  .servers-note{ text-align:center; font-size:12px; color:var(--text-lo); margin-top:18px; }
+
+  /* ===== guide: steps + faq ===== */
+  .steps{ display:grid; grid-template-columns:1fr; gap:14px; margin-bottom:40px; }
+  .step{
+    display:flex; align-items:flex-start; gap:16px;
+    background:var(--glass); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    border:1px solid var(--line);
+    border-radius:16px; padding:20px 22px; box-shadow:var(--shadow-sm);
+    transition:border-color .2s ease, box-shadow .2s ease;
+  }
+  .step:hover{ border-color:rgba(63,224,255,.3); box-shadow:var(--shadow-md); }
+  .step-num{
+    flex-shrink:0; width:38px; height:38px; border-radius:11px;
+    background:radial-gradient(circle, rgba(63,224,255,.16), rgba(63,224,255,.02));
+    border:1px solid rgba(63,224,255,.25);
+    color:var(--cyan); font-family:'Orbitron',sans-serif; font-weight:700;
+    display:flex; align-items:center; justify-content:center; font-size:14px;
+  }
+  .step-body h3{ font-size:15px; margin-bottom:5px; }
+  .step-body p{ font-size:13.5px; color:var(--text-lo); line-height:1.9; }
+  .step-body code{
+    background:var(--bg-void); border:1px solid var(--line); border-radius:6px;
+    padding:1px 7px; font-size:12px; color:var(--cyan-soft); direction:ltr; display:inline-block;
+  }
+  .faq{ display:flex; flex-direction:column; gap:10px; }
+  .faq-item{
+    background:var(--glass); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    border:1px solid var(--line); border-radius:14px;
+    padding:17px 20px; box-shadow:var(--shadow-sm);
+    transition:border-color .2s ease;
+  }
+  .faq-item:hover{ border-color:rgba(63,224,255,.3); }
+  .faq-q{ color:var(--cyan-soft); font-weight:700; font-size:14px; margin-bottom:8px; }
+  .faq-a{ color:var(--text-lo); font-size:13px; line-height:1.9; }
+
+  footer{
+    text-align:center; padding:40px 20px 40px; color:var(--text-lo); font-size:12px; line-height:2;
+    border-top:1px solid var(--line);
+  }
+  footer .warn{
+    color:#ffb443; background:rgba(255,180,67,.08); border:1px solid rgba(255,180,67,.25);
+    border-radius:12px; padding:14px 18px; max-width:560px; margin:0 auto 20px; font-size:12.5px; line-height:2;
+  }
+
+  @media (max-width:560px){
+    .features{ grid-template-columns:1fr 1fr; }
+    .stats-grid{ grid-template-columns:1fr 1fr; }
+    .cards-grid{ grid-template-columns:1fr; }
+    .servers-grid{ grid-template-columns:1fr 1fr; }
+    .link-row{ flex-direction:column; align-items:stretch; }
+    .copy-btn{ width:100%; }
+    .cta-btn{ width:100%; justify-content:center; }
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .dot2{ animation:none; }
+    .cursor{ animation:none; }
+    .hero .shield::before{ animation:none; }
+    html{ scroll-behavior:auto; }
+  }
+
+  /* ===== splash screen ===== */
+  .splash{
+    position:fixed; inset:0; z-index:100;
+    background:var(--bg-void); display:flex; align-items:center; justify-content:center;
+    transition:opacity .5s ease, visibility .5s ease;
+  }
+  .splash img{
+    width:68px; height:68px; border-radius:16px;
+    animation:splashPulse 1.2s ease-in-out infinite;
+  }
+  .splash.hide{ opacity:0; visibility:hidden; pointer-events:none; }
+  @keyframes splashPulse{ 0%,100%{ transform:scale(1); opacity:1; } 50%{ transform:scale(1.08); opacity:.7; } }
+
+  /* ===== toast ===== */
+  .toast-container{
+    position:fixed; bottom:22px; left:50%; transform:translateX(-50%); z-index:90;
+    display:flex; flex-direction:column; gap:8px; align-items:center; pointer-events:none;
+  }
+  .toast{
+    background:var(--bg-panel); border:1px solid rgba(63,224,255,.35); color:var(--text-hi);
+    padding:11px 20px; border-radius:12px; font-size:12.5px;
+    box-shadow:0 10px 30px -10px rgba(0,0,0,.6);
+    opacity:0; transform:translateY(10px);
+    animation:toastIn .25s ease forwards, toastOut .25s ease forwards 2.3s;
+    white-space:nowrap;
+  }
+  @keyframes toastIn{ to{ opacity:1; transform:translateY(0); } }
+  @keyframes toastOut{ to{ opacity:0; transform:translateY(-6px); } }
+
+  /* ===== confetti ===== */
+  .confetti-piece{
+    position:fixed; width:6px; height:10px; z-index:95; border-radius:2px; pointer-events:none;
+  }
+
+  /* ===== floating support button ===== */
+  .fab-support{
+    position:fixed; bottom:22px; right:18px; z-index:50;
+    width:52px; height:52px; border-radius:50%;
+    background:linear-gradient(135deg, var(--cyan), var(--blue));
+    display:flex; align-items:center; justify-content:center; font-size:22px;
+    text-decoration:none; box-shadow:0 10px 30px -8px rgba(63,224,255,.65);
+    animation:fabPulse 2.4s ease-in-out infinite;
+  }
+  @keyframes fabPulse{ 0%,100%{ box-shadow:0 10px 30px -8px rgba(63,224,255,.65); } 50%{ box-shadow:0 10px 34px -4px rgba(63,224,255,.9); } }
+
+  /* ===== new badge ===== */
+  .new-badge{
+    background:var(--ok); color:#04121a; font-size:9px; font-weight:800;
+    padding:1px 6px; border-radius:999px; margin-inline-start:6px;
+  }
+
+  /* ===== comparison table ===== */
+  .compare-wrap{ overflow-x:auto; margin-top:28px; border-radius:14px; border:1px solid var(--line); }
+  .compare-table{ width:100%; border-collapse:collapse; font-size:12px; min-width:520px; }
+  .compare-table th, .compare-table td{
+    padding:12px 14px; text-align:center; border-bottom:1px solid var(--line);
+  }
+  .compare-table th{ background:var(--bg-panel); color:var(--cyan-soft); font-size:11.5px; }
+  .compare-table td{ color:var(--text-lo); }
+  .compare-table td:first-child, .compare-table th:first-child{
+    text-align:right; color:var(--text-hi); font-weight:600;
+  }
+  .compare-table tr:last-child td{ border-bottom:none; }
+
+  /* ===== testimonials ===== */
+  .testi-grid{ display:flex; flex-direction:column; gap:12px; }
+  .testi-card{
+    background:var(--glass); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    border:1px solid var(--line); border-radius:14px;
+    padding:17px 20px; box-shadow:var(--shadow-sm);
+  }
+  .testi-stars{ color:#ffcf4d; font-size:13px; margin-bottom:8px; }
+  .testi-text{ color:var(--text-lo); font-size:13px; line-height:1.9; margin-bottom:10px; }
+  .testi-name{ color:var(--cyan-soft); font-size:12px; font-weight:700; }
+
+  /* ===== about page ===== */
+  .about-text{ color:var(--text-lo); font-size:14px; line-height:2.1; max-width:640px; margin:0 auto 36px; text-align:center; }
+
+  /* ===== referral card ===== */
+  .ref-card{
+    background:linear-gradient(180deg, var(--bg-panel-2), var(--bg-panel));
+    border:1px solid var(--line); border-radius:18px; padding:22px; max-width:640px; margin:24px auto 0;
+  }
+  .ref-card h3{ font-size:14.5px; margin-bottom:6px; }
+  .ref-card p{ font-size:12px; color:var(--text-lo); margin-bottom:14px; line-height:1.8; }
+  .ref-input-row{ display:flex; gap:8px; }
+  .ref-input-row input{
+    flex:1; background:var(--bg-void); border:1px solid var(--line); border-radius:10px;
+    padding:11px 14px; color:var(--text-hi); font-size:13px; outline:none;
+  }
+  .ref-gen-btn{
+    flex-shrink:0; border:none; cursor:pointer; background:var(--bg-panel);
+    color:var(--cyan-soft); border:1px solid rgba(63,224,255,.3);
+    font-weight:700; font-size:12.5px; padding:0 18px; border-radius:10px;
+  }
+  #refResult{ display:none; margin-top:12px; }
+  @media (max-width:560px){
+    .ref-input-row{ flex-direction:column; }
+    .ref-gen-btn{ padding:11px; }
+  }
+
+  /* ===== theme toggle button ===== */
+  .theme-toggle{
+    width:40px; height:40px; border-radius:10px;
+    background:var(--bg-panel); border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; font-size:16px;
+    cursor:pointer; margin-inline-end:8px;
+  }
+  body.theme-alt{
+    --cyan:#b46bff;
+    --cyan-soft:#d9b3ff;
+    --blue:#7c3aed;
+  }
+
+  /* ===== menu search box ===== */
+  .menu-search{
+    background:var(--bg-void); border:1px solid var(--line); border-radius:10px;
+    padding:10px 14px; color:var(--text-hi); font-size:13px; font-family:'Vazirmatn',sans-serif;
+    outline:none; width:100%; margin-bottom:14px;
+  }
+  .menu-search::placeholder{ color:var(--text-lo); }
+  .menu-link.hidden{ display:none; }
+
+  /* ===== back to top ===== */
+  .back-to-top{
+    position:fixed; bottom:22px; left:18px; z-index:50;
+    width:44px; height:44px; border-radius:50%;
+    background:var(--bg-panel); border:1px solid var(--line); color:var(--cyan-soft);
+    display:flex; align-items:center; justify-content:center; font-size:18px;
+    cursor:pointer; box-shadow:0 10px 24px -10px rgba(0,0,0,.6);
+    opacity:0; pointer-events:none; transform:translateY(10px);
+    transition:opacity .2s ease, transform .2s ease;
+  }
+  .back-to-top.show{ opacity:1; pointer-events:auto; transform:translateY(0); }
+
+  /* ===== onboarding card ===== */
+  .onboard-card{
+    background:linear-gradient(135deg, rgba(63,224,255,.10), rgba(47,107,255,.10));
+    border:1px solid rgba(63,224,255,.3); border-radius:16px;
+    padding:18px 20px; max-width:640px; margin:0 auto 30px;
+  }
+  .onboard-card h4{ font-size:13.5px; margin-bottom:10px; color:var(--cyan-soft); }
+  .onboard-card ol{ margin:0; padding-inline-start:20px; color:var(--text-lo); font-size:12.5px; line-height:2.1; }
+  .onboard-close{
+    display:block; margin:14px auto 0; background:none; border:1px solid rgba(63,224,255,.3);
+    color:var(--cyan-soft); font-size:12px; padding:8px 20px; border-radius:8px; cursor:pointer;
+  }
+
+  /* ===== no-signup badge ===== */
+  .badge-row{ display:flex; justify-content:center; margin-bottom:18px; }
+  .no-signup-badge{
+    display:inline-flex; align-items:center; gap:6px;
+    background:rgba(57,255,176,.08); border:1px solid rgba(57,255,176,.3);
+    color:var(--ok); font-size:11.5px; font-weight:700; padding:7px 16px; border-radius:999px;
+  }
+
+  /* ===== last updated ===== */
+  .updated-note{
+    text-align:center; font-size:11.5px; color:var(--text-lo); margin-bottom:20px;
+  }
+  .updated-note span{ color:var(--cyan-soft); font-weight:600; }
+
+  /* ===== direct download txt ===== */
+  .dl-txt-row{ display:flex; gap:10px; justify-content:center; margin-top:10px; flex-wrap:wrap; }
+  .dl-txt-btn{
+    text-decoration:none; font-size:12px; color:var(--text-lo);
+    border:1px solid var(--line); padding:8px 16px; border-radius:8px;
+    background:var(--bg-panel);
+  }
+  .dl-txt-btn:hover{ color:var(--cyan-soft); border-color:rgba(63,224,255,.35); }
+</style>
+</head>
+<body>
+
+<div class="splash" id="splash">
+  <img src="logo.jpg" alt="RAVVPN">
+</div>
+
+<div class="grid-bg"></div>
+<div class="glow-orb one"></div>
+<div class="glow-orb two"></div>
+
+<div class="topnav">
+  <div class="inner">
+    <div class="brand">
+      <img src="logo.jpg" alt="RAVVPN">
+      <span>RAVVPN</span>
+    </div>
+    <div style="display:flex; align-items:center;">
+      <div class="theme-toggle" id="themeToggle" aria-label="تغییر رنگ‌بندی">🎨</div>
+      <div class="hamburger" id="hamburger" aria-label="باز کردن منو">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="menu-overlay" id="menuOverlay">
+  <div class="menu-panel">
+    <div class="menu-head">
+      <span>منو</span>
+      <div class="menu-close" id="menuClose">✕</div>
+    </div>
+    <input class="menu-search" id="menuSearch" type="text" placeholder="جستجو تو بخش‌ها...">
+    <a class="menu-link" href="#home" data-page="home">خانه</a>
+    <a class="menu-link" href="#free" data-page="free">کانفیگ رایگان</a>
+    <a class="menu-link" href="#buy" data-page="buy">خرید اشتراک</a>
+    <a class="menu-link" href="#download" data-page="download">دانلود اپ</a>
+    <a class="menu-link" href="#servers" data-page="servers">وضعیت سرورها</a>
+    <a class="menu-link" href="#guide" data-page="guide">راهنما</a>
+    <a class="menu-link" href="#about" data-page="about">درباره ما</a>
+    <a class="menu-link" href="#legal" data-page="legal">حریم خصوصی و قوانین</a>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <!-- ===== صفحه خانه ===== -->
+  <section class="page active" id="page-home">
+    <div class="hero">
+      <div class="shield">
+        <img src="logo.jpg" alt="RAVVPN Shield">
+      </div>
+      <div class="wordmark">RAVVPN</div>
+      <div class="tagline">FAST · STABLE · SECURE</div>
+
+      <h1><span id="typedText"></span><span class="cursor">|</span></h1>
+      <p class="lead">
+        بدون فیلتر، بدون محدودیت. کانفیگ رایگان بگیر یا برای سرعت و پایداری بیشتر، اشتراک اختصاصی تهیه کن.
+      </p>
+
+      <div class="badge-row">
+        <span class="no-signup-badge">✅ بدون ثبت‌نام، بدون ایمیل، بدون رمز عبور</span>
+      </div>
+
+      <div class="cta-row">
+        <a class="cta-btn primary" href="#free" data-page="free">⚡ کانفیگ رایگان</a>
+        <a class="cta-btn secondary" href="#buy" data-page="buy">🛒 خرید اشتراک</a>
+      </div>
+    </div>
+
+    <div class="onboard-card" id="onboardCard">
+      <h4>راهنمای سریع 👋</h4>
+      <ol>
+        <li>از منو (☰) بین بخش‌های سایت جابه‌جا شو</li>
+        <li>کانفیگ رایگان بگیر یا برای کیفیت بهتر، اشتراک بخر</li>
+        <li>اپ موردنظرت رو نصب کن، لینک رو اضافه کن و وصل شو</li>
+      </ol>
+      <button class="onboard-close" onclick="dismissOnboarding()">متوجه شدم</button>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-num" data-target="18400">0</div>
+        <div class="stat-label">کاربر فعال</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" data-target="76">0</div>
+        <div class="stat-label">کانفیگ فعال</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" data-target="5">0</div>
+        <div class="stat-label">کشور فعال</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" data-target="99">0</div>
+        <div class="stat-label">٪ آپتایم</div>
+      </div>
+    </div>
+
+    <div class="features">
+      <div class="feature">
+        <div class="ic">⚡</div>
+        <h4>سریع</h4>
+        <p>سرورهای پرسرعت و به‌روز</p>
+      </div>
+      <div class="feature">
+        <div class="ic">🛡️</div>
+        <h4>پایدار</h4>
+        <p>آپدیت خودکار کانفیگ‌ها</p>
+      </div>
+      <div class="feature">
+        <div class="ic">🔒</div>
+        <h4>امن</h4>
+        <p>بدون لاگ و ردیابی</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== صفحه کانفیگ رایگان ===== -->
+  <section class="page" id="page-free">
+    <div class="page-title">رایگان</div>
+    <h2 class="page-heading">لینک‌های سابسکریپشن</h2>
+
+    <p class="updated-note">آخرین آپدیت کانفیگ‌ها: <span id="lastUpdated">در حال محاسبه...</span></p>
+
+    <div class="link-card">
+      <div class="link-label">
+        <span>لینک سابسکریپشن اول</span>
+        <b>RAVVPN2</b>
+      </div>
+      <div class="link-row">
+        <input id="subLink1" type="text" readonly
+          value="https://raw.githubusercontent.com/ravenpon/sublink/refs/heads/main/RAVVPN2">
+        <button class="copy-btn" onclick="copyLink('subLink1', this)">کپی لینک</button>
+      </div>
+    </div>
+
+    <div class="link-card">
+      <div class="link-label">
+        <span>لینک سابسکریپشن دوم</span>
+        <b>RVVPN</b>
+      </div>
+      <div class="link-row">
+        <input id="subLink2" type="text" readonly
+          value="https://raw.githubusercontent.com/ravenpon/sublink/refs/heads/main/RVVPN">
+        <button class="copy-btn" onclick="copyLink('subLink2', this)">کپی لینک</button>
+      </div>
+    </div>
+
+    <p class="hint">لینک رو کپی کن و داخل اپلیکیشن وی‌پی‌ان خودت به‌عنوان سابسکریپشن اضافه کن.</p>
+    <div style="text-align:center; margin-top:14px;">
+      <button class="copy-btn" onclick="copyAllLinks(this)">کپی هر دو لینک با هم</button>
+    </div>
+
+    <div class="dl-txt-row">
+      <a class="dl-txt-btn" href="https://raw.githubusercontent.com/ravenpon/sublink/refs/heads/main/RAVVPN2" download="ravvpn-1.txt">دانلود فایل اول (.txt)</a>
+      <a class="dl-txt-btn" href="https://raw.githubusercontent.com/ravenpon/sublink/refs/heads/main/RVVPN" download="ravvpn-2.txt">دانلود فایل دوم (.txt)</a>
+    </div>
+  </section>
+
+  <!-- ===== صفحه خرید اشتراک ===== -->
+  <section class="page" id="page-buy">
+    <div class="page-title">اشتراک ویژه</div>
+    <h2 class="page-heading">خرید و پشتیبانی</h2>
+    <div class="cards-grid">
+      <a class="mini-card" href="https://t.me/ravvpn" target="_blank" rel="noopener">
+        <div class="ic">📢</div>
+        <h3>کانال تلگرام</h3>
+        <p>آپدیت‌ها و اخبار</p>
+        <span class="mini-btn">عضویت</span>
+      </a>
+      <a class="mini-card" href="https://t.me/ravvpnshopbot" target="_blank" rel="noopener">
+        <div class="ic">🛒</div>
+        <h3>ربات خرید</h3>
+        <p>سرویس اختصاصی و پرسرعت</p>
+        <span class="mini-btn">شروع خرید</span>
+      </a>
+      <a class="mini-card" href="https://t.me/ravvpnsup" target="_blank" rel="noopener">
+        <div class="ic">🎧</div>
+        <h3>پشتیبانی</h3>
+        <p>سوال یا مشکل داری؟</p>
+        <span class="mini-btn">گفتگو</span>
+      </a>
+    </div>
+
+    <div class="ref-card">
+      <h3>دوستاتو دعوت کن</h3>
+      <p>یوزرنیم تلگرامتو وارد کن تا یک لینک اختصاصی برات ساخته بشه. این لینک رو برای دوستات بفرست.</p>
+      <div class="ref-input-row">
+        <input id="refInput" type="text" placeholder="یوزرنیم تلگرام بدون @">
+        <button class="ref-gen-btn" onclick="generateRefLink()">ساخت لینک</button>
+      </div>
+      <div id="refResult">
+        <div class="link-row" style="margin-top:0;">
+          <input id="refOutput" type="text" readonly>
+          <button class="copy-btn" onclick="copyLink('refOutput', this)">کپی</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== صفحه دانلود اپ ===== -->
+  <section class="page" id="page-download">
+    <div class="page-title">دانلود</div>
+    <h2 class="page-heading">اپلیکیشن موردنیازت رو نصب کن</h2>
+    <div class="cards-grid">
+      <a class="mini-card" href="https://github.com/2dust/v2rayNG/releases" target="_blank" rel="noopener">
+        <div class="ic">🤖</div>
+        <h3>V2rayNG</h3>
+        <p>اندروید · رایگان و متن‌باز</p>
+        <span class="mini-btn">دانلود</span>
+      </a>
+      <a class="mini-card" href="https://apps.apple.com/us/app/streisand/id6450534064" target="_blank" rel="noopener">
+        <div class="ic">🍎</div>
+        <h3>Streisand</h3>
+        <p>آیفون / آی‌پد · App Store</p>
+        <span class="mini-btn">دانلود</span>
+      </a>
+      <a class="mini-card" href="https://github.com/MatsuriDayo/NekoBoxForAndroid/releases" target="_blank" rel="noopener">
+        <div class="ic">🐱</div>
+        <h3>NekoBox</h3>
+        <p>اندروید · جایگزین V2rayNG</p>
+        <span class="mini-btn">دانلود</span>
+      </a>
+      <a class="mini-card" href="https://play.google.com/store/apps/details?id=dev.hexasoftware.v2box" target="_blank" rel="noopener">
+        <div class="ic">📦</div>
+        <h3>V2Box</h3>
+        <p>اندروید · Google Play</p>
+        <span class="mini-btn">دانلود</span>
+      </a>
+      <a class="mini-card" href="https://apps.apple.com/us/app/v2box-v2ray-client/id6446814690" target="_blank" rel="noopener">
+        <div class="ic">📦</div>
+        <h3>V2Box</h3>
+        <p>آیفون / آی‌پد · App Store</p>
+        <span class="mini-btn">دانلود</span>
+      </a>
+    </div>
+    <p class="hint">همیشه از لینک‌های رسمی بالا دانلود کن، نه از سایت‌های واسطه.</p>
+
+    <div class="compare-wrap">
+      <table class="compare-table">
+        <tr>
+          <th>اپلیکیشن</th>
+          <th>پلتفرم</th>
+          <th>متن‌باز</th>
+          <th>مناسب برای</th>
+        </tr>
+        <tr>
+          <td>V2rayNG</td>
+          <td>اندروید</td>
+          <td>بله</td>
+          <td>کاربران عادی و حرفه‌ای</td>
+        </tr>
+        <tr>
+          <td>Streisand</td>
+          <td>iOS</td>
+          <td>بله</td>
+          <td>کاربران آیفون</td>
+        </tr>
+        <tr>
+          <td>NekoBox</td>
+          <td>اندروید</td>
+          <td>بله</td>
+          <td>جایگزین سبک‌تر V2rayNG</td>
+        </tr>
+        <tr>
+          <td>V2Box</td>
+          <td>اندروید / iOS</td>
+          <td>خیر</td>
+          <td>رابط کاربری ساده‌تر</td>
+        </tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===== صفحه وضعیت سرورها ===== -->
+  <section class="page" id="page-servers">
+    <div class="page-title">وضعیت زنده</div>
+    <h2 class="page-heading">سرورهای فعال</h2>
+    <div class="servers-grid">
+      <div class="server-chip"><span class="dot2"></span><span class="name">آلمان</span><span class="flag">🇩🇪</span></div>
+      <div class="server-chip"><span class="dot2"></span><span class="name">فرانسه</span><span class="flag">🇫🇷</span></div>
+      <div class="server-chip"><span class="dot2"></span><span class="name">سوئد <span class="new-badge">جدید</span></span><span class="flag">🇸🇪</span></div>
+      <div class="server-chip"><span class="dot2"></span><span class="name">فنلاند <span class="new-badge">جدید</span></span><span class="flag">🇫🇮</span></div>
+      <div class="server-chip"><span class="dot2"></span><span class="name">آمریکا</span><span class="flag">🇺🇸</span></div>
+      <div class="server-chip offline"><span class="dot2"></span><span class="name">کانادا</span><span class="flag">🇨🇦</span></div>
+      <div class="server-chip offline"><span class="dot2"></span><span class="name">انگلستان</span><span class="flag">🇬🇧</span></div>
+      <div class="server-chip offline"><span class="dot2"></span><span class="name">سنگاپور</span><span class="flag">🇸🇬</span></div>
+      <div class="server-chip offline"><span class="dot2"></span><span class="name">ترکیه</span><span class="flag">🇹🇷</span></div>
+      <div class="server-chip offline"><span class="dot2"></span><span class="name">سوئیس</span><span class="flag">🇨🇭</span></div>
+    </div>
+    <p class="servers-note">سرورهای روشن (سبز) الان فعالن. سرورهای خاموش موقتاً در دسترس نیستن.</p>
+  </section>
+
+  <!-- ===== صفحه راهنما ===== -->
+  <section class="page" id="page-guide">
+    <div class="page-title">راه‌اندازی</div>
+    <h2 class="page-heading">افزودن سابسکریپشن در سه قدم</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">۱</div>
+        <div class="step-body">
+          <h3>اپ رو باز کن</h3>
+          <p>V2rayNG یا هر کلاینت دیگه رو نصب و باز کن.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">۲</div>
+        <div class="step-body">
+          <h3>سابسکریپشن جدید اضافه کن</h3>
+          <p>از منو گزینه‌ی <code>Subscriptions → Add</code> رو بزن و لینک صفحه «کانفیگ رایگان» رو پیست کن.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">۳</div>
+        <div class="step-body">
+          <h3>آپدیت و وصل شو</h3>
+          <p>روی <code>Update</code> بزن تا کانفیگ‌ها بارگذاری بشن، بهترین سرور رو انتخاب کن و وصل شو.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-title" style="margin-top:10px;">راهنما</div>
+    <h2 class="page-heading">سوالات پرتکرار</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <div class="faq-q">چرا وصل نمی‌شه؟</div>
+        <div class="faq-a">بعضی سرورها ممکنه موقتاً از دسترس خارج بشن. از داخل اپ روی «Update» بزن تا لیست سرورها به‌روزرسانی بشه، یا سرور دیگه‌ای رو امتحان کن.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">چند وقت یک‌بار کانفیگ‌ها آپدیت می‌شن؟</div>
+        <div class="faq-a">به‌صورت مرتب و بدون نیاز به تغییر لینک. کافیه از داخل اپ سابسکریپشن رو Update کنی.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">آیا واقعاً رایگانه؟</div>
+        <div class="faq-a">بله، کانفیگ رایگان کاملاً بدون ثبت‌نام یا پرداخته. اگه سرعت و پایداری بیشتری بخوای، می‌تونی از بخش «خرید اشتراک» استفاده کنی.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">اطلاعاتم لاگ یا ذخیره می‌شه؟</div>
+        <div class="faq-a">خیر، هیچ لاگ یا اطلاعات شخصی‌ای از فعالیت شما ذخیره نمی‌شه.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== صفحه درباره ما ===== -->
+  <section class="page" id="page-about">
+    <div class="page-title">درباره ما</div>
+    <h2 class="page-heading">چرا RAVVPN؟</h2>
+    <p class="about-text">
+      RAVVPN با هدف دسترسی آزاد، امن و بدون فیلتر برای همه راه‌اندازی شد. کانفیگ‌های رایگان به‌صورت مرتب آپدیت می‌شن و برای کسایی که به سرعت و پایداری بیشتری نیاز دارن، اشتراک اختصاصی هم ارائه می‌دیم. بدون ثبت‌نام، بدون لاگ، فقط یک لینک ساده.
+    </p>
+
+    <div class="page-title">نظرات کاربران</div>
+    <h2 class="page-heading">چی میگن؟</h2>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+        <div class="testi-text">سرعتش خیلی خوبه و لینک سابسکریپشن هم همیشه آپدیته. چند ماهه استفاده می‌کنم.</div>
+        <div class="testi-name">— کاربر تلگرام</div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+        <div class="testi-text">پشتیبانیش سریع جواب میده و سرورهای اروپا خیلی پایدارن.</div>
+        <div class="testi-name">— کاربر تلگرام</div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">⭐⭐⭐⭐</div>
+        <div class="testi-text">نسخه رایگان خوبه، برای استفاده روزمره کافیه.</div>
+        <div class="testi-name">— کاربر تلگرام</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== صفحه حریم خصوصی و قوانین ===== -->
+  <section class="page" id="page-legal">
+    <div class="page-title">قوانین</div>
+    <h2 class="page-heading">حریم خصوصی و شرایط استفاده</h2>
+
+    <div class="faq" style="max-width:640px; margin:0 auto;">
+      <div class="faq-item">
+        <div class="faq-q">🔒 حریم خصوصی</div>
+        <div class="faq-a">
+          RAVVPN هیچ لاگی از فعالیت آنلاین، آی‌پی، یا ترافیک کاربران ذخیره نمی‌کنه. اطلاعاتی مثل شماره تلفن یا ایمیل هم برای استفاده از کانفیگ‌های رایگان جمع‌آوری نمی‌شه. اگه از ربات خرید اشتراک استفاده کنی، فقط اطلاعات لازم برای پردازش تراکنش (مثل آیدی تلگرام) نگه‌داری می‌شه.
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">📜 شرایط استفاده</div>
+        <div class="faq-a">
+          استفاده از این سرویس به مسئولیت خود کاربره. کانفیگ‌های رایگان بدون تضمین در دسترس بودن دائمی ارائه می‌شن و ممکنه بدون اطلاع قبلی تغییر یا قطع بشن. استفاده از این سرویس برای فعالیت‌های غیرقانونی ممنوعه.
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">💳 قوانین خرید اشتراک</div>
+        <div class="faq-a">
+          خریدها از طریق ربات تلگرام انجام می‌شه. برای اطلاع از شرایط بازگشت وجه یا مشکلات مربوط به اشتراک، از طریق آیدی پشتیبانی با ما در تماس باش.
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">✉️ تماس با ما</div>
+        <div class="faq-a">
+          برای هر سوال یا مشکلی، از طریق کانال یا آیدی پشتیبانی تلگرام (بخش «خرید اشتراک») با ما در ارتباط باش.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="warn">
+      کانفیگ‌های رایگان ممکنه به مرور زمان کند یا قطع بشن. برای تجربه پایدارتر، از بخش «خرید اشتراک» استفاده کن.
+    </div>
+    ساخته‌شده با RAVVPN © 2026
+  </footer>
+
+</main>
+
+<a class="fab-support" href="https://t.me/ravvpnsup" target="_blank" rel="noopener" aria-label="پشتیبانی">🎧</a>
+
+<div class="back-to-top" id="backToTop" aria-label="برگشت به بالا">↑</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+// ===== ذخیره‌سازی امن (روی گیت‌هاب‌پیجز کار می‌کنه، تو پیش‌نمایش کلود غیرفعاله) =====
+function safeGet(key){
+  try { return localStorage.getItem(key); } catch(e){ return null; }
+}
+function safeSet(key, value){
+  try { localStorage.setItem(key, value); } catch(e){ /* در دسترس نیست، مشکلی نیست */ }
+}
+
+// ===== سوییچ بین صفحات =====
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const target = document.getElementById('page-' + name);
+  if (target) target.classList.add('active');
+  document.querySelectorAll('.menu-link').forEach(l => {
+    l.classList.toggle('active', l.dataset.page === name);
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  closeMenu();
+  safeSet('ravvpn_last_page', name);
+}
+
+// ===== منوی همبرگری (باید قبل از هر فراخوانی showPage تعریف بشه) =====
+const hamburger = document.getElementById('hamburger');
+const menuOverlay = document.getElementById('menuOverlay');
+const menuClose = document.getElementById('menuClose');
+
+function openMenu(){
+  menuOverlay.classList.add('open');
+  hamburger.classList.add('open');
+}
+function closeMenu(){
+  menuOverlay.classList.remove('open');
+  hamburger.classList.remove('open');
+}
+hamburger.addEventListener('click', () => {
+  menuOverlay.classList.contains('open') ? closeMenu() : openMenu();
+});
+menuClose.addEventListener('click', closeMenu);
+menuOverlay.addEventListener('click', (e) => {
+  if (e.target === menuOverlay) closeMenu();
+});
+
+// ===== ناوبری با پشتیبانی از دکمه Back مرورگر =====
+document.querySelectorAll('[data-page]').forEach(el => {
+  el.addEventListener('click', (e) => {
+    e.preventDefault();
+    const name = el.getAttribute('data-page');
+    if (location.hash.replace('#','') !== name){
+      history.pushState({ page: name }, '', '#' + name);
+    }
+    showPage(name);
+  });
+});
+
+window.addEventListener('popstate', () => {
+  const name = location.hash.replace('#', '') || 'home';
+  showPage(name);
+});
+
+// صفحه اول رو با state ثبت می‌کنیم تا Back اول به «خانه» برگرده، نه بیرون از سایت
+let initialPage = location.hash.replace('#', '') || '';
+if (!initialPage){
+  const remembered = safeGet('ravvpn_last_page');
+  initialPage = (remembered && document.getElementById('page-' + remembered)) ? remembered : 'home';
+}
+history.replaceState({ page: initialPage }, '', '#' + initialPage);
+showPage(initialPage);
+
+// ===== کپی لینک سابسکریپشن =====
+function copyLink(inputId, btn){
+  const input = document.getElementById(inputId);
+  input.select();
+  input.setSelectionRange(0, 99999);
+  navigator.clipboard.writeText(input.value).then(() => {
+    const original = btn.textContent;
+    btn.textContent = 'کپی شد ✓';
+    btn.classList.add('copied');
+    showToast('لینک کپی شد ✓');
+    confettiBurst();
+    setTimeout(() => { btn.textContent = original; btn.classList.remove('copied'); }, 1800);
+  });
+}
+
+// ===== انیمیشن شمارش آمار =====
+function animateCount(el){
+  const target = parseInt(el.getAttribute('data-target'), 10);
+  const duration = 1400;
+  const start = performance.now();
+  function tick(now){
+    const progress = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const value = Math.floor(eased * target);
+    el.textContent = value.toLocaleString('fa-IR');
+    if (progress < 1) requestAnimationFrame(tick);
+    else el.textContent = target.toLocaleString('fa-IR');
+  }
+  requestAnimationFrame(tick);
+}
+const statEls = document.querySelectorAll('.stat-num');
+if (statEls.length && 'IntersectionObserver' in window){
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting){
+        animateCount(entry.target);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.4 });
+  statEls.forEach(el => observer.observe(el));
+} else {
+  statEls.forEach(el => { el.textContent = el.getAttribute('data-target'); });
+}
+
+// ===== افکت تایپینگ عنوان اصلی =====
+const typedPhrases = [
+  "دسترسی آزاد به همه سرورها",
+  "بدون فیلتر، بدون محدودیت",
+  "سرعت بالا، اتصال پایدار",
+  "امنیت کامل، بدون لاگ"
+];
+const typedEl = document.getElementById('typedText');
+if (typedEl){
+  let phraseIndex = 0, charIndex = 0, deleting = false;
+  const TYPE_SPEED = 65, DELETE_SPEED = 35, HOLD_TIME = 1600;
+  function typeLoop(){
+    const current = typedPhrases[phraseIndex];
+    if (!deleting){
+      charIndex++;
+      typedEl.textContent = current.slice(0, charIndex);
+      if (charIndex === current.length){
+        deleting = true;
+        setTimeout(typeLoop, HOLD_TIME);
+        return;
+      }
+      setTimeout(typeLoop, TYPE_SPEED);
+    } else {
+      charIndex--;
+      typedEl.textContent = current.slice(0, charIndex);
+      if (charIndex === 0){
+        deleting = false;
+        phraseIndex = (phraseIndex + 1) % typedPhrases.length;
+      }
+      setTimeout(typeLoop, DELETE_SPEED);
+    }
+  }
+  typeLoop();
+}
+
+// ===== اسپلش‌اسکرین =====
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const splash = document.getElementById('splash');
+    if (splash) splash.classList.add('hide');
+  }, 600);
+});
+
+// ===== نوتیفیکیشن Toast =====
+function showToast(message){
+  const container = document.getElementById('toastContainer');
+  if (!container) return;
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.textContent = message;
+  container.appendChild(toast);
+  setTimeout(() => toast.remove(), 2700);
+}
+
+// ===== افکت کانفتی موقع کپی =====
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function confettiBurst(){
+  if (prefersReducedMotion) return;
+  const colors = ['#3fe0ff', '#2f6bff', '#8bf2ff', '#39ffb0'];
+  for (let i = 0; i < 22; i++){
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    el.style.left = (42 + Math.random() * 16) + 'vw';
+    el.style.top = '38vh';
+    el.style.background = colors[Math.floor(Math.random() * colors.length)];
+    document.body.appendChild(el);
+    const dx = (Math.random() - 0.5) * 320;
+    const dy = 220 + Math.random() * 220;
+    const duration = 900 + Math.random() * 500;
+    el.animate(
+      [
+        { transform: 'translate(0,0) rotate(0deg)', opacity: 1 },
+        { transform: `translate(${dx}px, ${dy}px) rotate(${Math.random() * 720}deg)`, opacity: 0 }
+      ],
+      { duration, easing: 'ease-out' }
+    );
+    setTimeout(() => el.remove(), duration);
+  }
+}
+
+// ===== کپی هر دو لینک با هم =====
+function copyAllLinks(btn){
+  const l1 = document.getElementById('subLink1').value;
+  const l2 = document.getElementById('subLink2').value;
+  navigator.clipboard.writeText(l1 + '\n' + l2).then(() => {
+    const original = btn.textContent;
+    btn.textContent = 'کپی شد ✓';
+    btn.classList.add('copied');
+    showToast('هر دو لینک کپی شد ✓');
+    confettiBurst();
+    setTimeout(() => { btn.textContent = original; btn.classList.remove('copied'); }, 1800);
+  });
+}
+
+// ===== ساخت لینک دعوت (بدون بک‌اند، فقط برای اشتراک‌گذاری) =====
+function generateRefLink(){
+  const input = document.getElementById('refInput');
+  const value = input.value.trim().replace('@', '');
+  if (!value){
+    showToast('یوزرنیم تلگرامتو وارد کن');
+    return;
+  }
+  const url = location.origin + location.pathname + '?ref=' + encodeURIComponent(value);
+  const output = document.getElementById('refOutput');
+  output.value = url;
+  document.getElementById('refResult').style.display = 'block';
+  showToast('لینک دعوت ساخته شد ✓');
+}
+
+// ===== ثبت Service Worker برای PWA =====
+if ('serviceWorker' in navigator){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}
+
+// ===== جستجو تو منو =====
+const menuSearch = document.getElementById('menuSearch');
+if (menuSearch){
+  menuSearch.addEventListener('input', () => {
+    const q = menuSearch.value.trim();
+    document.querySelectorAll('.menu-link').forEach(link => {
+      const match = link.textContent.includes(q);
+      link.classList.toggle('hidden', q.length > 0 && !match);
+    });
+  });
+  menuSearch.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter'){
+      const firstVisible = [...document.querySelectorAll('.menu-link')].find(l => !l.classList.contains('hidden'));
+      if (firstVisible) firstVisible.click();
+    }
+  });
+}
+// وقتی منو باز می‌شه، فوکوس بره رو جستجو و فیلتر قبلی پاک بشه
+hamburger.addEventListener('click', () => {
+  if (menuOverlay.classList.contains('open') && menuSearch){
+    menuSearch.value = '';
+    document.querySelectorAll('.menu-link').forEach(l => l.classList.remove('hidden'));
+  }
+});
+
+// ===== تغییر رنگ‌بندی (سایان/بنفش) =====
+const themeToggle = document.getElementById('themeToggle');
+if (themeToggle){
+  if (safeGet('ravvpn_theme') === 'alt'){
+    document.body.classList.add('theme-alt');
+  }
+  themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('theme-alt');
+    safeSet('ravvpn_theme', document.body.classList.contains('theme-alt') ? 'alt' : 'default');
+  });
+}
+
+// ===== دکمه برگشت به بالا =====
+const backToTop = document.getElementById('backToTop');
+if (backToTop){
+  window.addEventListener('scroll', () => {
+    backToTop.classList.toggle('show', window.scrollY > 400);
+  });
+  backToTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
+
+// ===== راهنمای اولیه (Onboarding) — فقط بار اول نمایش داده می‌شه =====
+const onboardCard = document.getElementById('onboardCard');
+if (onboardCard){
+  if (safeGet('ravvpn_onboarded') === '1'){
+    onboardCard.style.display = 'none';
+  }
+}
+function dismissOnboarding(){
+  const card = document.getElementById('onboardCard');
+  if (card) card.style.display = 'none';
+  safeSet('ravvpn_onboarded', '1');
+}
+
+// ===== تایمر «آخرین آپدیت کانفیگ‌ها» — کاملاً خودکار، از تاریخچه گیت‌هاب می‌خونه =====
+function formatRelativeTime(isoDate){
+  const diffMs = Date.now() - new Date(isoDate).getTime();
+  const diffMin = Math.floor(diffMs / 60000);
+  if (diffMin < 1) return "همین الان";
+  if (diffMin < 60) return diffMin + " دقیقه پیش";
+  const diffHour = Math.floor(diffMin / 60);
+  if (diffHour < 24) return diffHour + " ساعت پیش";
+  const diffDay = Math.floor(diffHour / 24);
+  return diffDay + " روز پیش";
+}
+
+async function fetchLastConfigUpdate(){
+  const el = document.getElementById('lastUpdated');
+  if (!el) return;
+  const repo = "ravenpon/sublink";
+  const files = ["RAVVPN2", "RVVPN"];
+  try{
+    const results = await Promise.all(
+      files.map(f =>
+        fetch(`https://api.github.com/repos/${repo}/commits?path=${f}&per_page=1`)
+          .then(r => r.ok ? r.json() : [])
+          .catch(() => [])
+      )
+    );
+    const dates = results
+      .map(commits => commits[0]?.commit?.author?.date)
+      .filter(Boolean)
+      .map(d => new Date(d).getTime());
+    if (dates.length){
+      const latest = new Date(Math.max(...dates));
+      el.textContent = formatRelativeTime(latest.toISOString());
+    } else {
+      el.textContent = "در دسترس نیست";
+    }
+  } catch(e){
+    el.textContent = "در دسترس نیست";
+  }
+}
+fetchLastConfigUpdate();
+// هر ۲ ساعت یک‌بار دوباره از گیت‌هاب چک می‌کنه تا عدد به‌روز بمونه
+setInterval(fetchLastConfigUpdate, 2 * 60 * 60 * 1000);
+</script>
+
+</body>
+</html>
