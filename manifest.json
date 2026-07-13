@@ -1,0 +1,16 @@
+{
+  "name": "RAVVPN",
+  "short_name": "RAVVPN",
+  "description": "سریع، پایدار، امن",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#03060c",
+  "theme_color": "#03060c",
+  "dir": "rtl",
+  "lang": "fa",
+  "icons": [
+    { "src": "logo.jpg", "sizes": "192x192", "type": "image/jpeg" },
+    { "src": "logo.jpg", "sizes": "512x512", "type": "image/jpeg" }
+  ]
+}
