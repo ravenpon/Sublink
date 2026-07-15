@@ -23,8 +23,14 @@ TELEGRAM_CHANNELS = [
     "UnlimitConfig", "persianvpnhub", "proxy_kafee", "YamYamProxy",
     "JavidanNet", "ConfigFast", "Zed_NetMeli", "erfanandroid",
     "configshere", "cpy_teeL", "MARAMBASHI", "meliproxyy",
-    "SRCVPN", "anty_filter", "DailyV2Proxy", "TheFreeConfings",
-    "OpenVpnUser", "Proxy_Station", "GH_v2rayng", "Net2ray",
+    "SRCVPN", "anty_filter", "DailyV2Proxy", "TheFreeConfigs",
+    "OpenVpnUser", "Proxy_Station", "GH_v2rayng", "Net2Ray",
+    "FreakConfig", "configraygan", "V2RAYROZ", "G0Dv2ray",
+    "YamYamProxy2", "chat_naakon", "chat_nakoni", "directvvbh",
+    "prrofile_purple", "NPV_78", "vpnplusee_free", "v2ray_free_conf",
+    "vpns", "canfigv2ray", "v2ray26", "filembad", "TAK_VPN12",
+    "V2rayEnglishGP", "canfige", "OmegaGR", "Dr_Npv", "v2ray_proxyz",
+    "Badangellll",
 ]
 
 MESSAGES_PER_CHANNEL = 80  # چند پیام آخر هر کانال بررسی بشه
