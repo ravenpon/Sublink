@@ -2,7 +2,7 @@ name: Update Free Configs
 
 on:
   schedule:
-    - cron: "0 * * * *"   # هر ۱ ساعت یک‌بار اجرا می‌شه
+    - cron: "*/30 * * * *"   # هر ۳۰ دقیقه یک‌بار اجرا می‌شه
   workflow_dispatch: {}       # امکان اجرای دستی از تب Actions
 
 permissions:
