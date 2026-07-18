@@ -42,6 +42,14 @@ PING_WORKERS = 40
 VALID_PREFIXES = ("vless://", "vmess://", "trojan://", "ss://", "ssr://", "hysteria2://", "hy2://", "tuic://")
 BRAND_FORMAT = "{flag} | RAV VPN • {country} ⚡️"
 
+# این کانفیگ نمایشی هیچ‌وقت وصل نمی‌شه، فقط به‌عنوان یادآوری همیشه ردیف اول لیست می‌مونه
+PINNED_NOTICE_CONFIG = (
+    "vless://00000000-0000-0000-0000-000000000000@127.0.0.1:1"
+    "?security=none&type=tcp"
+    "#%E2%9A%A0%EF%B8%8F%20%D9%87%D8%B1%20%D9%86%DB%8C%D9%85%20%D8%B3%D8%A7%D8%B9%D8%AA"
+    "%20%D8%A2%D9%BE%D8%AF%DB%8C%D8%AA%20%DA%A9%D9%86%DB%8C%D8%AF%20%E2%9A%A0%EF%B8%8F"
+)
+
 CONFIG_REGEX = re.compile(
     r"(?:vless|vmess|trojan|ss|ssr|hysteria2|hy2|tuic)://[^\s`\"'<>]+"
 )
@@ -210,10 +218,11 @@ def main():
             renamed.append(rename_config(line, "🌐", "Unknown"))
 
     output = "\n".join(renamed) + "\n"
+    final_output = PINNED_NOTICE_CONFIG + "\n" + output
     with open("RAVVPN2", "w", encoding="utf-8") as f:
-        f.write(output)
+        f.write(final_output)
     with open("RVVPN", "w", encoding="utf-8") as f:
-        f.write(output)
+        f.write(final_output)
 
     print(f"🎉 مجموع {len(renamed)} کانفیگ زنده و با اسم اختصاصی ذخیره شد.")
 
